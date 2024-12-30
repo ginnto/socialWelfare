@@ -4,5 +4,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', views.index, name='index'),  # urladdressname , function call, path name
+    path('ecompage', views.ecompage, name='ecompage'),
 
 ]
