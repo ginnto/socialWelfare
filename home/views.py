@@ -29,7 +29,7 @@ def ecompage(request,c_slug=None):
         proe = p.page(p.num_pages)
         print('hlo', proe)
     # --------------------------------------------page end----------------------------
-    return render(request, 'product.html', {'pro': prodt, 'ct': cat, 'pr': proe})
+    return render(request, 'products.html', {'pro': prodt, 'ct': cat, 'pr': proe})
 
 def detail(request, c_slug, product_slug):
     prodt = products.objects.get(category__slug=c_slug, slug=product_slug)

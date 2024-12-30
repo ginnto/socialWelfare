@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization Form</title>
+
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px 30px;
+  width: 400px;
+}
+
+h2 {
+  text-align: center;
+  color: #333333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-submit {
+  display: block;
+  width: 100%;
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background: #0056b3;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Organization Registration</h2>
+    <form action="" method="post">
+      <div class="form-group">
+        <label for="user">User</label>
+        <input type="text" id="user" name="user" placeholder="Enter user" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" id="category" name="category" placeholder="Enter category" required>
+      </div>
+
+      <div class="form-group">
+        <label for="org_city">City</label>
+        <input type="text" id="org_city" name="org_city" placeholder="Enter city" required>
+      </div>
+
+      <div class="form-group">
+        <label for="org_district">District</label>
+        <input type="text" id="org_district" name="org_district" placeholder="Enter district" required>
+      </div>
+
+      <div class="form-group">
+        <label for="org_pincode">Pincode</label>
+        <input type="number" id="org_pincode" name="org_pincode" placeholder="Enter pincode" required>
+      </div>
+
+      <div class="form-group">
+        <label for="reg_no">Registration Number</label>
+        <input type="text" id="reg_no" name="reg_no" placeholder="Enter registration number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="org_mail">Email</label>
+        <input type="email" id="org_mail" name="org_mail" placeholder="Enter email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="org_phno">Phone Number</label>
+        <input type="tel" id="org_phno" name="org_phno" placeholder="Enter phone number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="org_poc">Point of Contact</label>
+        <input type="text" id="org_poc" name="org_poc" placeholder="Enter POC name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="type">Type</label>
+        <input type="text" id="type" name="type" value="organization" readonly>
+      </div>
+
+      <div class="form-group">
+        <label for="org_poc_no">POC Phone Number</label>
+        <input type="tel" id="org_poc_no" name="org_poc_no" placeholder="Enter POC phone number" required>
+      </div>
+
+      <div class="form-group">
+        <label for="j_date">Joining Date</label>
+        <input type="date" id="j_date" name="j_date" required>
+      </div>
+
+      <button type="submit" class="btn-submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

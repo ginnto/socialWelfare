@@ -146,52 +146,57 @@
     <div class="container py-5">
         <div class="row">
             <!-- Product 1 -->
+            {% for i in pr %}
+
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="card border-0 shadow-sm">
-                    <img src="{% static 'img/product1.jpg' %}" class="card-img-top" alt="Product 1">
+                    <img src="{{i.img.url}}" class="card-img-top" alt="Product 1">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Product Name 1</h5>
-                        <p class="card-text">$29.99</p>
+                        <h5 class="card-title"><a href="{{i.get_url}}">{{i.name}}</a></h5>
+                        <div class="cat">
+									<span>{{i.category}}</span>
+								</div>
+                        <p class="card-text">{{i.price}}</p>
+                        <p class="card-text">{{i.stock}}</p>
                         <button class="btn btn-primary">Add to Cart</button>
                     </div>
                 </div>
             </div>
-            <!-- Product 2 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <img src="{% static 'img/product2.jpg' %}" class="card-img-top" alt="Product 2">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Product Name 2</h5>
-                        <p class="card-text">$49.99</p>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Product 3 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <img src="{% static 'img/product3.jpg' %}" class="card-img-top" alt="Product 3">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Product Name 3</h5>
-                        <p class="card-text">$19.99</p>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Product 4 -->
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <img src="{% static 'img/product4.jpg' %}" class="card-img-top" alt="Product 4">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Product Name 4</h5>
-                        <p class="card-text">$39.99</p>
-                        <button class="btn btn-primary">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
+
         </div>
     </div>
     <!-- Products Section End -->
+    <!--------------------------Pagination----------------------------->
+
+					<div class="row my-5">
+						<div class="col-md-3 offset-md-5">
+
+							<nav aria-label="Page navigation example">
+								<ul class="pagination">
+									{% if pr.has_previous %}
+									<li class="page-item"><a class="page-link" href="?page={{ pr.previous_page_number }}">Previous</a>
+									</li>
+									{% endif %}
+
+									{% for i in pr.paginator.page_range %}
+									<li class="page-item{% if pr.number == i %} active{% endif %}">
+										<a class="page-link" href="?page={{i}}">{{i}}</a>
+									</li>
+									{% endfor %}
+
+									{% if pr.has_next %}
+									<li class="page-item"><a class="page-link" href="?page={{ pr.next_page_number }}">Next</a>
+									</li>
+									{% endif %}
+								</ul>
+
+							</nav>
+						</div>
+					</div>
+				  </div>
+    <!--------------------------Pagination  end----------------------------->
+
 
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-light py-5">
