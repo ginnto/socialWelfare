@@ -1,7 +1,11 @@
+from datetime import datetime
+
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .models import Organization
+from home.models import *
+
 
 def organization_register(request):
     if request.method == "POST":
@@ -88,4 +92,34 @@ def organization_login(request):
 
 def organization_dashboard(request):
     return render(request, 'orgdashboard.html')
+
+def organization_addproduct(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        desc = request.POST.get('desc')
+        stock = request.POST.get('stock')
+        price = request.POST.get('price')
+        category = categ.objects.get(id=request.POST.get('category'))
+        available = request.POST.get('available') == 'True'
+        img = request.FILES.get('img')
+
+        new_product = products(
+            name=name,
+            desc=desc,
+            stock=stock,
+            price=price,
+            category=category,
+            available=available,
+            img=img,
+            date=datetime.now(),
+            org_id=request.user.organization
+        )
+        new_product.save()
+
+        messages.success(request, 'Product added successfully!')
+        return redirect('product_add')
+
+    categories = categ.objects.all()
+
+    return render(request, 'orgaddproduct.html',{'categories': categories})
 
