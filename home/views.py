@@ -11,8 +11,7 @@ def index(request):
 def ecompage(request,c_slug=None):
     if c_slug != None:
         c_page = get_object_or_404(categ, slug=c_slug)  # c_page=men
-        prodt = products.objects.filter(category=c_page,
-                                        available=True)  # select * from product where category=men,available=true;
+        prodt = products.objects.filter(category=c_page,available=True)  # select * from product where category=men,available=true;
     else:
         prodt = products.objects.all().filter(available=True)
     cat = categ.objects.all()
@@ -31,17 +30,17 @@ def ecompage(request,c_slug=None):
     # --------------------------------------------page end----------------------------
     return render(request, 'products.html', {'pro': prodt, 'ct': cat, 'pr': proe})
 
-def detail(request, c_slug, product_slug):
-    prodt = products.objects.get(category__slug=c_slug, slug=product_slug)
+# def detail(request, c_slug, product_slug):
+#     prodt = products.objects.get(category__slug=c_slug, slug=product_slug)
+#
+#     return render(request, 'product-single.html', {'pr': prodt})
 
-    return render(request, 'product-single.html', {'pr': prodt})
-
-def searching(request):
-    if 'q' in request.GET:
-        query=request.GET.get('q')  #to store data in search box
-        prod=products.objects.all().filter(Q(name__icontains=query)|Q(desc__icontains=query),available=True)
-    return render(request,'search.html',{'pr':prod})
-
-
+# def searching(request):
+#     if 'q' in request.GET:
+#         query=request.GET.get('q')  #to store data in search box
+#         prod=products.objects.all().filter(Q(name__icontains=query)|Q(desc__icontains=query),available=True)
+#     return render(request,'search.html',{'pr':prod})
+#
+#
 
 

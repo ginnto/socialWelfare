@@ -3,6 +3,7 @@ from django.db import models
 
 class Organization(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    orgname=models.CharField(max_length=20)
     category = models.CharField(max_length=20)
     org_city = models.CharField(max_length=50)
     org_district = models.CharField(max_length=50)

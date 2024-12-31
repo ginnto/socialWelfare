@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from .models import Organization
 
-
 def organization_register(request):
     if request.method == "POST":
+        orgname = request.POST.get('orgname')  # New field to capture orgname
         category = request.POST.get('category')
         org_city = request.POST.get('org_city')
         org_district = request.POST.get('org_district')
@@ -24,26 +24,23 @@ def organization_register(request):
             messages.error(request, "Passwords do not match.")
             return redirect("organization_register")
 
-        if len(password) < 8:
-            messages.error(request, "Password must be at least 8 characters.")
-            return redirect("organization_register")
 
-        # Check if email is already registered
+
         if User.objects.filter(email=org_mail).exists():
             messages.error(request, "Email is already in use.")
             return redirect("organization_register")
 
-        # Create User
+
         user = User.objects.create_user(
-            username=org_mail,  # Use email as the username
+            username=org_mail,
             password=password,
             email=org_mail
         )
         user.save()
 
-        # Create Organization
         organization = Organization.objects.create(
             user=user,
+            orgname=orgname,  # Save the new field
             category=category,
             org_city=org_city,
             org_district=org_district,
@@ -60,7 +57,7 @@ def organization_register(request):
         messages.success(request, "Organization registration successful!")
         return redirect('organization_login')
     else:
-        return render(request, 'organization_register.html')
+        return render(request, 'org_register.html')
 
 
 def organization_login(request):
