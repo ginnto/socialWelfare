@@ -28,7 +28,7 @@ def organization_register(request):
 
         if User.objects.filter(email=org_mail).exists():
             messages.error(request, "Email is already in use.")
-            return redirect("organization_register")
+            return redirect("orgregister")
 
 
         user = User.objects.create_user(
@@ -55,7 +55,7 @@ def organization_register(request):
         organization.save()
 
         messages.success(request, "Organization registration successful!")
-        return redirect('organization_login')
+        return redirect('orglogin')
     else:
         return render(request, 'org_register.html')
 
@@ -65,26 +65,27 @@ def organization_login(request):
         org_mail = request.POST.get('org_mail')
         password = request.POST.get('password')
 
-        # Authenticate the user
         user = auth.authenticate(request, username=org_mail, password=password)
-
         if user is not None:
-            # Check if the user belongs to the Organization model
             try:
                 organization = Organization.objects.get(user=user)
                 if organization.type == 'organization':
-                    # Login the user
+
                     auth.login(request, user)
                     messages.success(request, "Login successful!")
-                    return redirect('organization_dashboard')
+                    return redirect('orgdashboard')
                 else:
                     messages.error(request, "You are not authorized to log in as an organization.")
-                    return redirect('organization_login')
+                    return redirect('orglogin')
             except Organization.DoesNotExist:
                 messages.error(request, "Organization not found.")
-                return redirect('organization_login')
+                return redirect('orglogin')
         else:
             messages.error(request, "Invalid email or password.")
-            return redirect('organization_login')
+            return redirect('orglogin')
     else:
-        return render(request, 'organization_login.html')
+        return render(request, 'orglogin.html')
+
+def organization_dashboard(request):
+    return render(request, 'orgdashboard.html')
+

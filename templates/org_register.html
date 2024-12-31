@@ -47,7 +47,8 @@
     input[type="email"],
     input[type="tel"],
     input[type="number"],
-    input[type="date"] {
+    input[type="date"],
+    input[type="password"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #cccccc;
@@ -59,7 +60,8 @@
     input[type="email"]:focus,
     input[type="tel"]:focus,
     input[type="number"]:focus,
-    input[type="date"]:focus {
+    input[type="date"]:focus,
+    input[type="password"]:focus {
       border-color: #007bff;
       outline: none;
       box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -107,7 +109,7 @@
   <div class="form-container">
     <h2>Organization Registration</h2>
     <form action="{% url 'orgregister' %}" method="post">
-       {% csrf_token %}
+      {% csrf_token %}
       <div class="form-row">
         <div class="form-group">
           <label for="orgname">Organization Name</label>
@@ -173,7 +175,21 @@
           <label for="org_poc_no">POC Phone Number</label>
           <input type="tel" id="org_poc_no" name="org_poc_no" placeholder="Enter POC phone number" required>
         </div>
+      </div>
 
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter Password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter Password" required>
+        </div>
+      </div>
+
+      <div class="form-row">
         <div class="form-group">
           <label for="j_date">Joining Date</label>
           <input type="date" id="j_date" name="j_date" required>
