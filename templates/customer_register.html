@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Customer Registration</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cust_name">Full Name</label>
+                <input type="text" id="cust_name" name="cust_name" required>
+            </div>
+            <div class="form-group">
+                <label for="cust_gender">Gender</label>
+                <select name="cust_gender" id="cust_gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cust_houseno">House No</label>
+                <input type="text" id="cust_houseno" name="cust_houseno" required>
+            </div>
+            <div class="form-group">
+                <label for="cust_city">City</label>
+                <input type="text" id="cust_city" name="cust_city" required>
+            </div>
+            <div class="form-group">
+                <label for="cust_district">District</label>
+                <input type="text" id="cust_district" name="cust_district" required>
+            </div>
+            <div class="form-group">
+                <label for="cust_pincode">Pincode</label>
+                <input type="number" id="cust_pincode" name="cust_pincode" required>
+            </div>
+            <div class="form-group">
+                <label for="cust_email">Email</label>
+                <input type="email" id="cust_email" name="cust_email" required>
+            </div>
+            <div class="form-group">
+                <label for="cust_phno">Phone Number</label>
+                <input type="text" id="cust_phno" name="cust_phno" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="form-group">
+                <label for="photo">Upload Photo</label>
+                <input type="file" id="photo" name="photo">
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>

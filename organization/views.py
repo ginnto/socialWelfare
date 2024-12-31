@@ -114,12 +114,11 @@ def organization_addproduct(request):
             date=datetime.now(),
             org_id=request.user.organization
         )
+
         new_product.save()
 
         messages.success(request, 'Product added successfully!')
-        return redirect('product_add')
-
+        return redirect('orgaddproduct')
     categories = categ.objects.all()
-
     return render(request, 'orgaddproduct.html',{'categories': categories})
 
