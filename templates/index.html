@@ -78,12 +78,13 @@
                 <div class="navbar-nav ms-auto py-0">
                     <a href="index.html" class="nav-item nav-link active">Home</a>
                     <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="{% url 'ecompage' %}" class="nav-item nav-link">ecom</a>
+<!--                    <a href="{% url 'ecompage' %}" class="nav-item nav-link">ecom</a>-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Register</a>
                         <div class="dropdown-menu m-0">
                             <a href="{% url 'orgregister' %}" class="dropdown-item">Organization</a>
-                            <a href="detail.html" class="dropdown-item">User</a>
+                            <a href="{% url 'customer_register' %}  " class="dropdown-item">User</a>
+                            <a href="{% url 'customer_login' %}  " class="dropdown-item">User Login</a>
                         </div>
                     </div>
                 </div>

@@ -66,7 +66,7 @@ def customer_login(request):
                 customer = Customer.objects.get(user=user)
                 auth.login(request, user)
                 messages.success(request, "Login successful!")
-                return redirect('customer_dashboard')
+                return redirect('ecompage')
             except Customer.DoesNotExist:
                 messages.error(request, "Customer profile not found.")
                 return redirect('customer_login')
