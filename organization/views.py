@@ -2,12 +2,13 @@ from datetime import datetime
 
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from .models import Organization
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import *
 from home.models import *
 
 
 def organization_register(request):
+    cat = Category.objects.all()
     if request.method == "POST":
         orgname = request.POST.get('orgname')  # New field to capture orgname
         category = request.POST.get('category')
@@ -18,7 +19,6 @@ def organization_register(request):
         org_mail = request.POST.get('org_mail')
         org_phno = request.POST.get('org_phno')
         org_poc = request.POST.get('org_poc')
-        org_poc_no = request.POST.get('org_poc_no')
         j_date = request.POST.get('j_date')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
@@ -34,6 +34,7 @@ def organization_register(request):
             messages.error(request, "Email is already in use.")
             return redirect("orgregister")
 
+        category = get_object_or_404(Category, id=category)
 
         user = User.objects.create_user(
             username=org_mail,
@@ -53,7 +54,6 @@ def organization_register(request):
             org_mail=org_mail,
             org_phno=org_phno,
             org_poc=org_poc,
-            org_poc_no=org_poc_no,
             j_date=j_date,
         )
         organization.save()
@@ -61,7 +61,7 @@ def organization_register(request):
         messages.success(request, "Organization registration successful!")
         return redirect('orglogin')
     else:
-        return render(request, 'org_register.html')
+        return render(request, 'org_register.html',{'c':cat})
 
 
 def organization_login(request):
@@ -91,6 +91,7 @@ def organization_login(request):
         return render(request, 'orglogin.html')
 
 def organization_dashboard(request):
+
     return render(request, 'orgdashboard.html')
 
 def organization_addproduct(request):

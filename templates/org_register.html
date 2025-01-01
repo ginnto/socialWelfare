@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organization Form</title>
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,32 +13,32 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .form-container {
       background: #ffffff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px 30px;
-      width: 800px;
+      padding: 30px;
+      width: 100%;
+      max-width: 800px;
     }
 
     h2 {
       text-align: center;
       color: #333333;
+      margin-bottom: 20px;
     }
 
     .form-group {
       margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
     }
 
     label {
-      display: block;
       font-weight: bold;
       margin-bottom: 5px;
+      display: block;
       color: #555555;
     }
 
@@ -48,7 +47,8 @@
     input[type="tel"],
     input[type="number"],
     input[type="date"],
-    input[type="password"] {
+    input[type="password"],
+    select {
       width: 100%;
       padding: 10px;
       border: 1px solid #cccccc;
@@ -56,12 +56,8 @@
       font-size: 14px;
     }
 
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="tel"]:focus,
-    input[type="number"]:focus,
-    input[type="date"]:focus,
-    input[type="password"]:focus {
+    input:focus,
+    select:focus {
       border-color: #007bff;
       outline: none;
       box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -74,11 +70,11 @@
     }
 
     .form-row .form-group {
-      flex: 1 1 calc(50% - 20px); /* Each column takes 50% of the container width, minus the gap */
+      flex: 1 1 calc(50% - 20px); /* Takes up half of the width, minus the gap */
     }
 
     .form-group.full-width {
-      flex: 1 1 100%; /* For full-width fields, such as the Submit button */
+      flex: 1 1 100%; /* For full-width items */
     }
 
     .btn-submit {
@@ -86,12 +82,13 @@
       width: 100%;
       background: #007bff;
       color: white;
-      padding: 10px;
+      padding: 12px;
       border: none;
       border-radius: 4px;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 10px;
+      text-align: center;
+      transition: background 0.3s ease;
     }
 
     .btn-submit:hover {
@@ -100,7 +97,7 @@
 
     @media (max-width: 768px) {
       .form-row .form-group {
-        flex: 1 1 100%; /* Stacks the form fields vertically on smaller screens */
+        flex: 1 1 100%; /* Stacks form fields on smaller screens */
       }
     }
   </style>
@@ -115,10 +112,14 @@
           <label for="orgname">Organization Name</label>
           <input type="text" id="orgname" name="orgname" placeholder="Enter organization name" required>
         </div>
-
         <div class="form-group">
           <label for="category">Category</label>
-          <input type="text" id="category" name="category" placeholder="Enter category" required>
+          <select id="category" name="category" required>
+            <option value="" disabled selected>Select a category</option>
+            {% for cat in c %}
+            <option value="{{ cat.id }}">{{ cat.category }}</option>
+            {% endfor %}
+          </select>
         </div>
       </div>
 
@@ -127,7 +128,6 @@
           <label for="org_city">City</label>
           <input type="text" id="org_city" name="org_city" placeholder="Enter city" required>
         </div>
-
         <div class="form-group">
           <label for="org_district">District</label>
           <input type="text" id="org_district" name="org_district" placeholder="Enter district" required>
@@ -139,7 +139,6 @@
           <label for="org_pincode">Pincode</label>
           <input type="number" id="org_pincode" name="org_pincode" placeholder="Enter pincode" required>
         </div>
-
         <div class="form-group">
           <label for="reg_no">Registration Number</label>
           <input type="text" id="reg_no" name="reg_no" placeholder="Enter registration number" required>
@@ -151,7 +150,6 @@
           <label for="org_mail">Email</label>
           <input type="email" id="org_mail" name="org_mail" placeholder="Enter email" required>
         </div>
-
         <div class="form-group">
           <label for="org_phno">Phone Number</label>
           <input type="tel" id="org_phno" name="org_phno" placeholder="Enter phone number" required>
@@ -160,32 +158,19 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label for="org_poc">Point of Contact</label>
+          <label for="org_poc">Person of Contact</label>
           <input type="text" id="org_poc" name="org_poc" placeholder="Enter POC name" required>
         </div>
 
-        <div class="form-group">
-          <label for="type">Type</label>
-          <input type="text" id="type" name="type" value="organization" readonly>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="org_poc_no">POC Phone Number</label>
-          <input type="tel" id="org_poc_no" name="org_poc_no" placeholder="Enter POC phone number" required>
-        </div>
-      </div>
 
       <div class="form-row">
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter Password" required>
+          <input type="password" id="password" name="password" placeholder="Enter password" required>
         </div>
-
         <div class="form-group">
           <label for="confirm_password">Confirm Password</label>
-          <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter Password" required>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required>
         </div>
       </div>
 

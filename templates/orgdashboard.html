@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 
-
     <!-- Dashboard Start -->
+{% if organization.admin_approval == "approved" %}
     <div class="container py-5">
         <div class="row">
             <!-- Left Sidebar -->
@@ -19,44 +19,54 @@
 
             <!-- Main Content -->
             <div class="col-lg-9">
-                <h2 class="mb-4">Welcome, {{ organization.name }}</h2>
 
-                <!-- Organization Information -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h4>Organization Information</h4>
-                        <p><strong>Name:</strong> {{ organization.name }}</p>
-                        <p><strong>Category:</strong> {{ organization.category }}</p>
-                        <p><strong>Email:</strong> {{ organization.email }}</p>
-                        <p><strong>Phone:</strong> {{ organization.phone }}</p>
-                        <p><strong>Address:</strong> {{ organization.address }}</p>
-                        <p><strong>Pincode:</strong> {{ organization.pincode }}</p>
-                    </div>
-                </div>
+                    <h2 class="mb-4">Welcome, {{ organization.orgname }}</h2>
 
-                <!-- Recent Activities -->
-                <h3>Recent Activities</h3>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <ul>
-                            <li>Project XYZ started on 12th Jan 2024.</li>
-                            <li>Donation drive raised $5000 on 5th Feb 2024.</li>
-                            <li>Team building workshop scheduled for 20th Feb 2024.</li>
-                        </ul>
+                    <!-- Organization Information -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h4>Organization Information</h4>
+                            <p><strong>Name:</strong> {{ organization.orgname }}</p>
+                            <p><strong>Category:</strong> {{ organization.category.category }}</p>
+                            <p><strong>Email:</strong> {{ organization.org_mail }}</p>
+                            <p><strong>Phone:</strong> {{ organization.org_phno }}</p>
+                            <p><strong>Address:</strong> {{ organization.org_city }}, {{ organization.org_district }}</p>
+                            <p><strong>Pincode:</strong> {{ organization.org_pincode }}</p>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Donations -->
-                <h3>Recent Donations</h3>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <ul>
-                            <li>John Doe - $200 (12th Jan 2024)</li>
-                            <li>Jane Smith - $500 (8th Feb 2024)</li>
-                            <li>XYZ Corp - $1000 (25th Feb 2024)</li>
-                        </ul>
+                    <!-- Recent Activities -->
+                    <h3>Recent Activities</h3>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <ul>
+                                <li>Project XYZ started on 12th Jan 2024.</li>
+                                <li>Donation drive raised $5000 on 5th Feb 2024.</li>
+                                <li>Team building workshop scheduled for 20th Feb 2024.</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Donations -->
+                    <h3>Recent Donations</h3>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <ul>
+                                <li>John Doe - $200 (12th Jan 2024)</li>
+                                <li>Jane Smith - $500 (8th Feb 2024)</li>
+                                <li>XYZ Corp - $1000 (25th Feb 2024)</li>
+                            </ul>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Approval Pending Message -->
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h3 class="text-danger">Your profile is under review!</h3>
+                            <p>Please wait for admin approval to access the dashboard features.</p>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

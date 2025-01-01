@@ -4,4 +4,4 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Organization)
-admin.site.register(category)
+admin.site.register(Category)
