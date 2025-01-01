@@ -1,6 +1,8 @@
 from django.contrib import messages, auth
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from .forms import CustomerProfileForm
 from .models import *
 
 def customer_register(request):
@@ -75,4 +77,23 @@ def customer_login(request):
             return redirect('customer_login')
     else:
         return render(request, 'customer_login.html')
+def customer_profile(request):
+    customer = Customer.objects.get(user=request.user)
+    return render(request, 'customer_profile.html', {'customer': customer})
 
+
+@login_required
+def edit_profile(request):
+    customer = Customer.objects.get(user=request.user)
+    if request.method == 'POST':
+        form = CustomerProfileForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('customer_profile')
+    else:
+        form = CustomerProfileForm(instance=customer)
+    return render(request, 'edit_profile.html', {'form': form})
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')

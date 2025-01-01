@@ -1,0 +1,79 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Profile Card -->
+            <div class="card shadow">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3>Customer Profile</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Profile Picture -->
+                    <div class="text-center mb-4">
+                        <img 
+                            src="{{ customer.photo.url }}" 
+                            alt="Profile Picture" 
+                            class="rounded-circle img-thumbnail" 
+                            style="width: 150px; height: 150px; object-fit: cover;"
+                        >
+                    </div>
+                    
+                    <!-- Profile Information -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5><strong>Name:</strong></h5>
+                            <p>{{ customer.cust_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>Gender:</strong></h5>
+                            <p>{{ customer.cust_gender }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5><strong>Email:</strong></h5>
+                            <p>{{ customer.cust_email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>Phone Number:</strong></h5>
+                            <p>{{ customer.cust_phno }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5><strong>House No:</strong></h5>
+                            <p>{{ customer.cust_houseno }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>City:</strong></h5>
+                            <p>{{ customer.cust_city }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5><strong>District:</strong></h5>
+                            <p>{{ customer.cust_district }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>Pincode:</strong></h5>
+                            <p>{{ customer.cust_pincode }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Button -->
+                    <div class="text-center">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

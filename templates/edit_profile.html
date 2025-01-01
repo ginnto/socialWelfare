@@ -1,0 +1,86 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Edit Profile Card -->
+            <div class="card shadow">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3>Edit Profile</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <!-- Profile Picture -->
+                        <div class="mb-3 text-center">
+                            <img 
+                                src="{{ form.instance.photo.url }}" 
+                                alt="Current Profile Picture" 
+                                class="rounded-circle img-thumbnail mb-3" 
+                                style="width: 120px; height: 120px; object-fit: cover;"
+                            >
+                            <input type="file" name="photo" class="form-control">
+                        </div>
+
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="cust_name" class="form-label"><strong>Name:</strong></label>
+                            {{ form.cust_name }}
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="mb-3">
+                            <label for="cust_gender" class="form-label"><strong>Gender:</strong></label>
+                            {{ form.cust_gender }}
+                        </div>
+
+                        <!-- Address -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cust_houseno" class="form-label"><strong>House No:</strong></label>
+                                {{ form.cust_houseno }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cust_city" class="form-label"><strong>City:</strong></label>
+                                {{ form.cust_city }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cust_district" class="form-label"><strong>District:</strong></label>
+                                {{ form.cust_district }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cust_pincode" class="form-label"><strong>Pincode:</strong></label>
+                                {{ form.cust_pincode }}
+                            </div>
+                        </div>
+
+                        <!-- Email and Phone -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cust_email" class="form-label"><strong>Email:</strong></label>
+                                {{ form.cust_email }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cust_phno" class="form-label"><strong>Phone Number:</strong></label>
+                                {{ form.cust_phno }}
+                            </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            <a href="{% url 'customer_profile' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

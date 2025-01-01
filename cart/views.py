@@ -64,10 +64,7 @@ def min_cart(request, product_id):
     try:
         if user.is_authenticated:
             ct_list = cartlist.objects.filter(user=user)
-        else:
-            cart_id = request.session.get('cart_id')
-            ct_list = cartlist.objects.filter(cart_id=cart_id)
-        # ct=cartlist.objects.get(user=user,cart_id=c_id(request))æ
+
         if ct_list.exists:
             for ct in ct_list:
                 pro = get_object_or_404(products, id=product_id)
@@ -91,9 +88,6 @@ def cart_delete(request, product_id):
     try:
         if user.is_authenticated:
             ct_list = cartlist.objects.filter(user=user)
-        else:
-            cart_id = request.session.get('cart_id')
-            ct_list = cartlist.objects.filter(cart_id=cart_id)
 
         if ct_list.exists():
             for ct in ct_list:
