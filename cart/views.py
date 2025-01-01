@@ -169,5 +169,7 @@ def payments(request):
 
 #     return render(request,'successful.html')
 
+def orders(request):
 
+     return render(request,'orders.html')
 
