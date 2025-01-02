@@ -2,8 +2,10 @@
 {% load static %}
 {% block content %}
 
+
     <!-- Dashboard Start -->
-{% if organization.admin_approval == "approved" %}
+{% if organization.admin_approval|lower == "approved" %}
+
     <div class="container py-5">
         <div class="row">
             <!-- Left Sidebar -->
@@ -71,5 +73,5 @@
         </div>
     </div>
     <!-- Dashboard End -->
-
+<h1>{{organization.admin_approval}} </h1>
 {% endblock %}

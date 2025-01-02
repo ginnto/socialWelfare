@@ -90,9 +90,12 @@ def organization_login(request):
     else:
         return render(request, 'orglogin.html')
 
-def organization_dashboard(request):
 
-    return render(request, 'orgdashboard.html')
+
+def organization_dashboard(request):
+    organization = Organization.objects.get(user=request.user)  # Modify as per your model structure
+    return render(request, 'orgdashboard.html', {'organization': organization})
+
 
 def organization_addproduct(request):
     if request.method == "POST":

@@ -2,62 +2,59 @@
 {% load static %}
 {% block content %}
 
-    <!-- Orders Page Content -->
-    <div class="container py-5">
-        <h2 class="text-center mb-4">Your Orders</h2>
-        <div class="row">
-            <div class="col-lg-10 mx-auto">
-                <!-- Orders List -->
-                <div class="list-group">
-                    <!-- Single Order -->
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-1">Order #12345</h5>
-                                <small>Date: 2024-01-01</small><br>
-                                <small>Total: $50</small>
-                            </div>
-                            <div>
-                                <span class="badge bg-success">Delivered</span>
-                            </div>
-                        </div>
-                        <p class="mb-1 mt-2">Product 1 (x1), Product 2 (x2)</p>
-                        <a href="order-details.html" class="btn btn-sm btn-primary mt-2">View Details</a>
-                    </div>
+<!-- Cart Page Content -->
+<div class="container py-5">
+    <h2 class="text-center mb-4">Your Cart</h2>
 
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-1">Order #12346</h5>
-                                <small>Date: 2023-12-30</small><br>
-                                <small>Total: $120</small>
-                            </div>
-                            <div>
-                                <span class="badge bg-warning text-dark">In Progress</span>
-                            </div>
-                        </div>
-                        <p class="mb-1 mt-2">Product 3 (x1), Product 4 (x3)</p>
-                        <a href="order-details.html" class="btn btn-sm btn-primary mt-2">View Details</a>
-                    </div>
+    <!-- Order Details Section -->
+    {% if order %}
+    <div class="order-details mb-4">
+        <h4>Order Details</h4>
+        <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+        <p><strong>Customer Name:</strong> {{ order.customer_name }}</p>
+        <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+        <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+        <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+    </div>
+    {% endif %}
 
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-1">Order #12347</h5>
-                                <small>Date: 2023-12-25</small><br>
-                                <small>Total: $75</small>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Cart List -->
+            <div class="list-group">
+                {% for i in ci %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ i.prod.img.url }}" alt="{{ i.prod.name }} Image" class="img-fluid" style="width: 50px; height: 50px; margin-right: 15px;">
+                        <div>
+                            <h5 class="mb-1">{{ i.prod.name }}</h5>
+                            <div class="d-flex align-items-center">
+                                <a href="{% url 'addcart' i.prod.id %}"><button class="btn btn-sm btn-outline-primary me-2">+</button></a>
+                                <span class="quantity">{{ i.quan }}</span>
+                                <a href="{% url 'cart_decrement' i.prod.id %}"><button class="btn btn-sm btn-outline-primary ms-2">-</button></a>
                             </div>
-                            <div>
-                                <span class="badge bg-danger">Cancelled</span>
-                            </div>
+                            <small>Price: ₹{{ i.prod.price }}</small>
                         </div>
-                        <p class="mb-1 mt-2">Product 5 (x2), Product 6 (x1)</p>
-                        <a href="order-details.html" class="btn btn-sm btn-primary mt-2">View Details</a>
+                    </div>
+                    <div>
+                        <a href="{% url 'remove' i.prod.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i> Remove</a>
                     </div>
                 </div>
+                {% endfor %}
             </div>
+
+            <!-- Cart Total -->
+            {% if cn == 0 %}
+                <h5>Your cart is empty.</h5>
+            {% else %}
+                <div class="mt-4 text-end">
+                    <h4>Total: ₹{{ t }}</h4>
+                    <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+                </div>
+            {% endif %}
         </div>
     </div>
-    <!-- Orders Page Content End -->
+</div>
+<!-- Cart Page Content End -->
 
 {% endblock %}

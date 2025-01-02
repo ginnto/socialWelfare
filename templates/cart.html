@@ -9,105 +9,39 @@
         <div class="col-lg-8 mx-auto">
             <!-- Cart List -->
             <div class="list-group">
-                <!-- Single Product -->
+                {% for i in ci %}
                 <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">Product Name 1</h5>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-primary me-2" onclick="decreaseQuantity(this, 25)">-</button>
-                            <span class="quantity" data-price="25">2</span>
-                            <button class="btn btn-sm btn-outline-primary ms-2" onclick="increaseQuantity(this, 25)">+</button>
+                    <div class="d-flex align-items-center">
+                        <img src="{{ i.prod.img.url }}" alt="{{ i.prod.name }} Image" class="img-fluid" style="width: 50px; height: 50px; margin-right: 15px;">
+                        <div>
+                            <h5 class="mb-1">{{ i.prod.name }}</h5>
+                            <div class="d-flex align-items-center">
+                                <a href="{% url 'addcart' i.prod.id %}"><button class="btn btn-sm btn-outline-primary me-2">+</button></a>
+                                <span class="quantity">{{ i.quan }}</span>
+                                <a href="{% url 'cart_decrement' i.prod.id %}"><button class="btn btn-sm btn-outline-primary ms-2">-</button></a>
+                            </div>
+                            <small>Price: ₹{{ i.prod.price }}</small>
                         </div>
-                        <small>Price: $<span class="product-price">50</span></small>
                     </div>
                     <div>
-                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i> Remove</button>
+                        <a href="{% url 'remove' i.prod.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i> Remove</a>
                     </div>
                 </div>
-
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">Product Name 2</h5>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-primary me-2" onclick="decreaseQuantity(this, 15)">-</button>
-                            <span class="quantity" data-price="15">1</span>
-                            <button class="btn btn-sm btn-outline-primary ms-2" onclick="increaseQuantity(this, 15)">+</button>
-                        </div>
-                        <small>Price: $<span class="product-price">15</span></small>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i> Remove</button>
-                    </div>
-                </div>
-
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">Product Name 3</h5>
-                        <div class="d-flex align-items-center">
-                            <button class="btn btn-sm btn-outline-primary me-2" onclick="decreaseQuantity(this, 10)">-</button>
-                            <span class="quantity" data-price="10">3</span>
-                            <button class="btn btn-sm btn-outline-primary ms-2" onclick="increaseQuantity(this, 10)">+</button>
-                        </div>
-                        <small>Price: $<span class="product-price">30</span></small>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash-alt"></i> Remove</button>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
             <!-- Cart Total -->
-            <div class="mt-4 text-end">
-                <h4>Total: $<span id="cart-total">95</span></h4>
-                <a href="checkout.html" class="btn btn-primary">Proceed to Checkout</a>
-            </div>
+            {% if cn == 0 %}
+                <h5>Your cart is empty.</h5>
+            {% else %}
+                <div class="mt-4 text-end">
+                    <h4>Total: ₹{{ t }}</h4>
+                    <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
 <!-- Cart Page Content End -->
-
-<script>
-    // Function to increase quantity
-    function increaseQuantity(button, price) {
-        const quantityElement = button.parentElement.querySelector('.quantity');
-        let quantity = parseInt(quantityElement.textContent);
-        quantity++;
-        quantityElement.textContent = quantity;
-
-        // Update product price
-        const productPriceElement = button.parentElement.nextElementSibling.querySelector('.product-price');
-        productPriceElement.textContent = (quantity * price).toFixed(2);
-
-        // Update cart total
-        updateCartTotal();
-    }
-
-    // Function to decrease quantity
-    function decreaseQuantity(button, price) {
-        const quantityElement = button.parentElement.querySelector('.quantity');
-        let quantity = parseInt(quantityElement.textContent);
-        if (quantity > 1) {
-            quantity--;
-            quantityElement.textContent = quantity;
-
-            // Update product price
-            const productPriceElement = button.parentElement.nextElementSibling.querySelector('.product-price');
-            productPriceElement.textContent = (quantity * price).toFixed(2);
-
-            // Update cart total
-            updateCartTotal();
-        }
-    }
-
-    // Function to update the cart total
-    function updateCartTotal() {
-        const productPrices = document.querySelectorAll('.product-price');
-        let total = 0;
-        productPrices.forEach(priceElement => {
-            total += parseFloat(priceElement.textContent);
-        });
-        document.getElementById('cart-total').textContent = total.toFixed(2);
-    }
-</script>
 
 {% endblock %}
