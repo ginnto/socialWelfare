@@ -9,10 +9,11 @@
             <div class="col-lg-3 mb-4 mb-lg-0">
                 <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
-                    <a href="#" class="list-group-item list-group-item-action">Manage Products</a>
-                    <a href="#" class="list-group-item list-group-item-action">Donations</a>
-                    <a href="#" class="list-group-item list-group-item-action">Reports</a>
-                    <a href="#" class="list-group-item list-group-item-action">Settings</a>
+                    <a href="{% url 'orgaddproduct' %}" class="list-group-item list-group-item-action">Add Product</a>
+                    <a href="{% url 'donation' %}" class="list-group-item list-group-item-action">Donations</a>
+                    <a href="{% url 'donationreq' %}" class="list-group-item list-group-item-action">Donations Request</a>
+                    <a href="{% url 'orderslist' %}" class="list-group-item list-group-item-action">Oders</a>
+                    <a href="#" class="list-group-item list-group-item-action">Feedback</a>
                 </div>
             </div>
 

@@ -1,0 +1,112 @@
+{% extends 'orgbase.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard Start -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-lg-3 mb-4 mb-lg-0">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
+                    <a href="{% url 'orgaddproduct' %}" class="list-group-item list-group-item-action">Add Product</a>
+                    <a href="{% url 'donation' %}" class="list-group-item list-group-item-action">Donations</a>
+                    <a href="{% url 'donationreq' %}" class="list-group-item list-group-item-action">Donations Request</a>
+                    <a href="{% url 'orderslist' %}" class="list-group-item list-group-item-action">Oders</a>
+                    <a href="#" class="list-group-item list-group-item-action">Feedback</a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <h2 class="mb-4">Orders List</h2>
+
+                <!-- Orders Table -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>User Name</th>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Payment Method</th>
+                                    <th>Payment Status</th>
+                                    <th>Total Price</th>
+                                    <th>Order Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Static Data for Testing -->
+                                <tr>
+                                    <td>1</td>
+                                    <td>john_doe</td>
+                                    <td>Product A</td>
+                                    <td>2</td>
+                                    <td>Credit Card</td>
+                                    <td><span class="badge badge-success">Paid</span></td>
+                                    <td>$100.00</td>
+                                    <td>2025-01-02</td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>mary_smith</td>
+                                    <td>Product B</td>
+                                    <td>1</td>
+                                    <td>PayPal</td>
+                                    <td><span class="badge badge-danger">Unpaid</span></td>
+                                    <td>$50.00</td>
+                                    <td>2025-01-03</td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>jane_doe</td>
+                                    <td>Product C</td>
+                                    <td>3</td>
+                                    <td>Bank Transfer</td>
+                                    <td><span class="badge badge-success">Paid</span></td>
+                                    <td>$180.00</td>
+                                    <td>2025-01-01</td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>peter_parker</td>
+                                    <td>Product D</td>
+                                    <td>1</td>
+                                    <td>Cash on Delivery</td>
+                                    <td><span class="badge badge-danger">Unpaid</span></td>
+                                    <td>$30.00</td>
+                                    <td>2025-01-04</td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard End -->
+
+{% endblock %}

@@ -126,3 +126,11 @@ def organization_addproduct(request):
     categories = categ.objects.all()
     return render(request, 'orgaddproduct.html',{'categories': categories})
 
+def orderslist(request):
+    return render(request, 'orgorder.html')
+
+def donation(request):
+    return render(request, 'orgdonation.html')
+
+def donationreq(request):
+    return render(request, 'orgdonationreq.html')

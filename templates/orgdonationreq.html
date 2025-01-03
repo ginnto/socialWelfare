@@ -1,0 +1,50 @@
+{% extends 'orgbase.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard Start -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-lg-3 mb-4 mb-lg-0">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
+                    <a href="{% url 'orgaddproduct' %}" class="list-group-item list-group-item-action">Add Product</a>
+                    <a href="{% url 'donation' %}" class="list-group-item list-group-item-action">Donations</a>
+                    <a href="{% url 'donationreq' %}" class="list-group-item list-group-item-action">Donation Requests</a>
+                    <a href="{% url 'orderslist' %}" class="list-group-item list-group-item-action">Orders</a>
+                    <a href="#" class="list-group-item list-group-item-action">Feedback</a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <h2 class="mb-4">Request a Donation</h2>
+
+                <!-- Donation Request Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="POST" action="#">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="goal_name">Donation Goal Name</label>
+                                <input type="text" class="form-control" id="goal_name" name="goal_name" required placeholder="Enter goal name">
+                            </div>
+                            <div class="form-group">
+                                <label for="requested_amount">Requested Amount ($)</label>
+                                <input type="number" class="form-control" id="requested_amount" name="requested_amount" required placeholder="Enter requested amount">
+                            </div>
+                            <div class="form-group">
+                                <label for="goal_description">Goal Description</label>
+                                <textarea class="form-control" id="goal_description" name="goal_description" rows="4" placeholder="Describe the donation goal"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard End -->
+
+{% endblock %}

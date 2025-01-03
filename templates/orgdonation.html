@@ -1,0 +1,86 @@
+{% extends 'orgbase.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Dashboard Start -->
+    <div class="container py-5">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-lg-3 mb-4 mb-lg-0">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active">Dashboard</a>
+                    <a href="{% url 'orgaddproduct' %}" class="list-group-item list-group-item-action">Add Product</a>
+                    <a href="{% url 'donation' %}" class="list-group-item list-group-item-action">Donations</a>
+                    <a href="{% url 'donationreq' %}" class="list-group-item list-group-item-action">Donations Request</a>
+                    <a href="{% url 'orderslist' %}" class="list-group-item list-group-item-action">Oders</a>
+                    <a href="#" class="list-group-item list-group-item-action">Feedback</a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <h2 class="mb-4">Donation List</h2>
+
+                <!-- Donations Table -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Donor Name</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Donation Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Static Data for Testing -->
+                                <tr>
+                                    <td>1</td>
+                                    <td>john_doe</td>
+                                    <td>$150.00</td>
+                                    <td>Credit Card</td>
+                                    <td>2025-01-02</td>
+                                    <td><span class="badge badge-success">Confirmed</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>mary_smith</td>
+                                    <td>$50.00</td>
+                                    <td>PayPal</td>
+                                    <td>2025-01-03</td>
+                                    <td><span class="badge badge-warning">Pending</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>jane_doe</td>
+                                    <td>$200.00</td>
+                                    <td>Bank Transfer</td>
+                                    <td>2025-01-01</td>
+                                    <td><span class="badge badge-success">Confirmed</span></td>
+                                    <td>
+                                        <a href="#" class="btn btn-info btn-sm">View</a>
+                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard End -->
+
+{% endblock %}

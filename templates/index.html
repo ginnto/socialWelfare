@@ -77,18 +77,23 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
                     <a href="index.html" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
+                    <a href="#about" class="nav-item nav-link">About</a>
 <!--                    <a href="{% url 'ecompage' %}" class="nav-item nav-link">ecom</a>-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Register</a>
                         <div class="dropdown-menu m-0">
-                            <a href="{% url 'orgregister' %}" class="dropdown-item">Organization</a>
-                            <a href="{% url 'customer_register' %}  " class="dropdown-item">User</a>
+                            <a href="{% url 'orgregister' %}" class="dropdown-item">Organization Register</a>
+                            <a href="{% url 'customer_register' %}  " class="dropdown-item">User Register</a>
+                        </div>
+                    </div>
+                     <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Login</a>
+                        <div class="dropdown-menu m-0">
+                            <a href="{% url 'orglogin' %}" class="dropdown-item">Organization Login</a>
                             <a href="{% url 'customer_login' %}  " class="dropdown-item">User Login</a>
                         </div>
                     </div>
                 </div>
-                <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></butaton>
                 <a href="{% url 'orglogin' %}" class="btn btn-primary py-2 px-4 ms-3">Login</a>
             </div>
         </nav>
@@ -196,7 +201,7 @@
 
 
     <!-- About Start -->
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div id="about" class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-7">
