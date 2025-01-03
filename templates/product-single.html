@@ -1,0 +1,38 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Product Detail Section Start -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <!-- Product Image -->
+            <img src="{{ product.img.url }}" alt="{{ product.name }}" class="img-fluid">
+        </div>
+        <div class="col-lg-6">
+            <!-- Product Details -->
+            <h2>{{ product.name }}</h2>
+            <div class="category">
+                <span>Category: {{ product.category }}</span>
+            </div>
+            <p class="description">{{ product.desc }}</p>
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Stock Quantity:</strong> {{ product.stock }}</p>
+
+            <!-- Availability Status -->
+            {% if product.available %}
+            <p class="text-success">Available</p>
+            {% else %}
+            <p class="text-danger">Out of Stock</p>
+            {% endif %}
+
+            <!-- Add to Cart Button -->
+            <a href="{% url 'addcart' product.id %}">
+                <button class="btn btn-primary">Add to Cart</button>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- Product Detail Section End -->
+
+{% endblock %}
