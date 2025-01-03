@@ -7,18 +7,16 @@ def cate(request):
 
 
 def cart_total(request):
-    tot = 0
-    count = 0
+    total_price = 0
+    item_count = 0
 
-    user = request.user
-    if user.is_authenticated:
-        ct = cartlist.objects.filter(user=user)
-    else:
-        cart_id = request.session.get('cart_id')
-        ct = cartlist.objects.filter(cart_id=cart_id)
+    if request.user.is_authenticated:
+        user = request.user
+        order_items = OrderItem.objects.filter(user=user, is_ordered=False, active=True)
 
-    ct_items = items.objects.filter(cart__in=ct, active=True)
-    for i in ct_items:
-        tot += (i.prod.price * i.quan)
-        count += i.quan
-    return {'t': tot, 'cn': count}
+        # Calculate total price and item count for the cart
+        for item in order_items:
+            total_price += item.total()
+            item_count += item.quan
+
+    return {'cart_total_price': total_price, 'cart_item_count': item_count}

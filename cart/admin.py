@@ -4,9 +4,9 @@ from . models import *
 
 # class cartadmin(admin.ModelAdmin):
 
-admin.site.register(cartlist)
-admin.site.register(items)
-admin.site.register(Checkout)
-admin.site.register(payment)
+admin.site.register(OrderItem)
+# admin.site.register(items)
+# admin.site.register(Checkout)
+# admin.site.register(payment)
 
 

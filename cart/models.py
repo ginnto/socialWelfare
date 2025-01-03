@@ -4,49 +4,40 @@ from django.contrib.auth.models import User   # user table
 
 # Create your models here.
 
-class cartlist(models.Model):
-    cart_id=models.CharField(max_length=250,unique=True)
-    date_added=models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)  # c/u
+class OrderItem(models.Model):
+    PENDING = 'Pending'
+    COMPLETED = 'Completed'
 
-    def __str__(self):
-        return self.cart_id
+    ORDER_STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (COMPLETED, 'Completed'),
+    ]
 
-class items(models.Model):
-    prod=models.ForeignKey(products,on_delete=models.CASCADE)    #here class/tale product from shop is act as a foreign key so we can fetch the values ...
-    cart=models.ForeignKey(cartlist,on_delete=models.CASCADE)
-    quan=models.IntegerField()
-    active=models.BooleanField(default=True)
-    def __str__(self):
-        return str(self.prod)
+    UNPAID = 'Unpaid'
+    PAID = 'Paid'
+
+    PAYMENT_STATUS_CHOICES = [
+        (UNPAID, 'Unpaid'),
+        (PAID, 'Paid'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)  # User who created the order
+    prod = models.ForeignKey(products, on_delete=models.CASCADE)  # Product that is being ordered
+    quan = models.IntegerField()  # Quantity of the product
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the product
+    active = models.BooleanField(default=True)  # Active status of the item in the cart
+    order_date = models.DateTimeField(auto_now_add=True)  # Date when the order was placed
+    is_ordered = models.BooleanField(default=False)  # Indicates whether this item is part of an order
+    order_status = models.CharField(max_length=50,choices=ORDER_STATUS_CHOICES,default='Pending')  # Track the order status (Pending, Completed, etc.)
+    payment_status = models.CharField(max_length=50,choices=PAYMENT_STATUS_CHOICES, default='Unpaid')  # Payment status (Unpaid, Paid)
+    # shipping_address = models.TextField(null=True, blank=True)  # Shipping address for the order
+    payment_method = models.CharField(max_length=50, null=True, blank=True)  # Payment method used
+    delivery_date = models.DateTimeField(null=True, blank=True)  # Delivery date
 
     def total(self):
-        return self.prod.price*self.quan
+        return self.prod.price * self.quan  # Calculate the total price for this item
 
+    def __str__(self):
+        return f"{self.prod.name} - {self.quan} x {self.price}"
 
-
-
-
-
-
-class Checkout(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cart = models.ForeignKey(cartlist, on_delete=models.CASCADE,null=True)
-    firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-    address = models.TextField(max_length=200)
-    towncity = models.CharField(max_length=100)
-    postcodezip = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20)
-    email = models.EmailField()
-
-
-class payment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    account_number = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    expiry_month = models.CharField(max_length=2)
-    expiry_year = models.CharField(max_length=2)
-    cvv = models.CharField(max_length=3)
 

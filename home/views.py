@@ -32,7 +32,6 @@ def ecompage(request,c_slug=None):
 
 def detail(request, c_slug, product_slug):
     prodt = products.objects.get(category__slug=c_slug, slug=product_slug)
-
     return render(request, 'product-single.html', {'product': prodt})
 
 def searching(request):

@@ -2,9 +2,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from home.models import *
+from django.db.models import F
+from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
-
 
 # Create your views here.
 def c_id(request):
@@ -14,156 +15,128 @@ def c_id(request):
     return ct_id
 
 
-@login_required(login_url='login')  # c/n     # login url for when user is not authenticated.... it redirect to login
+
+@login_required(login_url='login')
 def add_cart(request, product_id):
+
     prod = products.objects.get(id=product_id)
-    user = request.user  # c/n
+    user = request.user
+
     try:
-        ct = cartlist.objects.get(user=user)  # already existing
-    except cartlist.DoesNotExist:  # cartlist
-        ct = cartlist.objects.create(cart_id=c_id(request), user=user)  # new user          #c/n
-        ct.save()
-    try:
-        c_items = items.objects.get(prod=prod, cart=ct)  # same product existing
+        ct=OrderItem.objects.get(user=user)    #already existing
+        c_items = OrderItem.objects.get(prod=prod, cart=ct)  # same product existing
         if c_items.quan < c_items.prod.stock:
             c_items.quan += 1  # quan = quan + 1
             prod.stock -= 1
             prod.save()
-        c_items.save()  # items
-    except items.DoesNotExist:
-        c_items = items.objects.create(prod=prod, quan=1, cart=ct)
         c_items.save()
-    return redirect('cartDetails')
+    except OrderItem.DoesNotExist:                                 #cartlist
+        ct=OrderItem.objects.create(user=user,prod=prod,quan=1,price=100)    #new user          #c/n
+        ct.save()
 
 
-def cart_details(request, tot=0, count=0, cart_items=None, ct_items=None):
-    try:
-        user = request.user  # c/n
-
-        if user.is_authenticated:
-            ct = cartlist.objects.filter(user=user)
-
-        else:
-            cart_id = request.session.get('cart_id')
-            ct = cartlist.objects.filter(cart_id=cart_id)
-        # -------------------------------------------------------------------
-        ct_items = items.objects.filter(cart__in=ct, active=True)
-        for i in ct_items:
-            tot += (i.prod.price * i.quan)
-            count += i.quan
-
-    except ObjectDoesNotExist:
-        return HttpResponse("<script> alert('Empty Cart');window.location='/';</script>")
-
-    return render(request, 'cart.html', {'ci': ct_items, 't': tot, 'cn': count})
 
 
-@login_required(login_url='login')  # changed
+    return redirect('cartDetails')  # Redirect to the cart details page
+
+
+
+@login_required(login_url='login')
+def cart_details(request):
+    user = request.user
+    order_items = OrderItem.objects.filter(user=user, is_ordered=False, active=True)
+
+    # Calculate the total price of the cart
+    total_price = sum(item.total() for item in order_items)
+
+    return render(request, 'cart.html', {'order_items': order_items, 'total_price': total_price})
+
+
+@login_required(login_url='login')
 def min_cart(request, product_id):
     user = request.user
-    try:
-        if user.is_authenticated:
-            ct_list = cartlist.objects.filter(user=user)
+    order_item = get_object_or_404(OrderItem, user=user, prod__id=product_id, is_ordered=False, active=True)
 
-        if ct_list.exists:
-            for ct in ct_list:
-                pro = get_object_or_404(products, id=product_id)
-                try:
-                    c_items = items.objects.get(prod=pro, cart=ct)
-                    if c_items.quan > 1:
-                        c_items.quan -= 1
-                        c_items.save()
-                    else:
-                        c_items.delete()
-                except items.DoesNotExist:
-                    pass
-    except cartlist.DoesNotExist:
-        pass
-    return redirect('cartDetails')
+    if order_item.quan > 1:
+        order_item.quan -= 1
+        order_item.save()
+    else:
+        order_item.delete()  # If the quantity is 1, delete the item from the cart
+
+    return redirect('cart_details')
 
 
-@login_required(login_url='login')  # changed
+@login_required(login_url='login')
 def cart_delete(request, product_id):
     user = request.user
-    try:
-        if user.is_authenticated:
-            ct_list = cartlist.objects.filter(user=user)
+    order_item = get_object_or_404(OrderItem, user=user, prod__id=product_id, is_ordered=False, active=True)
+    order_item.delete()  # Delete the item from the cart
 
-        if ct_list.exists():
-            for ct in ct_list:
-                prod = get_object_or_404(products, id=product_id)
-                try:
-                    c_items = items.objects.get(prod=prod, cart=ct)
-                    c_items.delete()
-                except items.DoesNotExist:
-                    pass
-    except cartlist.DoesNotExist:
-        pass
-
-    return redirect('cartDetails')
+    return redirect('cart_details')
 
 
-def checkout(request):
-    if request.method == 'POST':
-        firstname = request.POST['fname']
-        lastname = request.POST['lname']
-        country = request.POST['country']
-        address = request.POST['address']
-        towncity = request.POST['city']
-        postcodezip = request.POST['pin']
-        phone = request.POST['phone']
-        email = request.POST['email']
-        cart = cartlist.objects.filter(user=request.user).first()
-
-        check = Checkout(
-            user=request.user,
-            cart=cart,
-            firstname=firstname,
-            lastname=lastname,
-            country=country,
-            address=address,
-            towncity=towncity,
-            postcodezip=postcodezip,
-            phone=phone,
-            email=email
-        )
-        check.save()
-        return redirect('payment')
-    return render(request, 'checkout.html')
-
-
-def payments(request):
-    if request.method == 'POST':
-        account_number = request.POST.get('account_number')
-        name = request.POST.get('name')
-        expiry_month = request.POST.get('expiry_month')
-        expiry_year = request.POST.get('expiry_year')
-        cvv = request.POST.get('cvv')
-
-        pay = payment(
-            user=request.user,
-            account_number=account_number,
-            name=name,
-            expiry_month=expiry_month,
-            expiry_year=expiry_year,
-            cvv=cvv
-        )
-        pay.save()
-
-        user = request.user
-        ct = cartlist.objects.get(user=user)
-        items.objects.filter(cart=ct).delete()
-
-        return render(request, 'successful.html')
-
-    return render(request, 'bank.html')
-
-
-# def success(request):
-
-#     return render(request,'successful.html')
-
-def orders(request):
-
-     return render(request,'orders.html')
-
+#
+# def checkout(request):
+#     if request.method == 'POST':
+#         firstname = request.POST['fname']
+#         lastname = request.POST['lname']
+#         country = request.POST['country']
+#         address = request.POST['address']
+#         towncity = request.POST['city']
+#         postcodezip = request.POST['pin']
+#         phone = request.POST['phone']
+#         email = request.POST['email']
+#         cart = cartlist.objects.filter(user=request.user).first()
+#
+#         check = Checkout(
+#             user=request.user,
+#             cart=cart,
+#             firstname=firstname,
+#             lastname=lastname,
+#             country=country,
+#             address=address,
+#             towncity=towncity,
+#             postcodezip=postcodezip,
+#             phone=phone,
+#             email=email
+#         )
+#         check.save()
+#         return redirect('payment')
+#     return render(request, 'checkout.html')
+#
+#
+# def payments(request):
+#     if request.method == 'POST':
+#         account_number = request.POST.get('account_number')
+#         name = request.POST.get('name')
+#         expiry_month = request.POST.get('expiry_month')
+#         expiry_year = request.POST.get('expiry_year')
+#         cvv = request.POST.get('cvv')
+#
+#         pay = payment(
+#             user=request.user,
+#             account_number=account_number,
+#             name=name,
+#             expiry_month=expiry_month,
+#             expiry_year=expiry_year,
+#             cvv=cvv
+#         )
+#         pay.save()
+#
+#         user = request.user
+#         ct = cartlist.objects.get(user=user)
+#         items.objects.filter(cart=ct).delete()
+#
+#         return render(request, 'successful.html')
+#
+#     return render(request, 'bank.html')
+#
+#
+# # def success(request):
+#
+# #     return render(request,'successful.html')
+#
+# def orders(request):
+#
+#      return render(request,'orders.html')
+#

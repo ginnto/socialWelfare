@@ -77,6 +77,7 @@ def customer_login(request):
             return redirect('customer_login')
     else:
         return render(request, 'customer_login.html')
+
 def customer_profile(request):
     customer = Customer.objects.get(user=request.user)
     return render(request, 'customer_profile.html', {'customer': customer})
