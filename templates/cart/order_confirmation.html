@@ -1,0 +1,111 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+
+{% block title %} AgriCart:Payment {% endblock %}
+
+{% block content %}
+
+<div id="confirmation-container">
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h2 class="btn btn-success px-3 py-3">Your Order Comfirmation</h2>
+        </div>
+    </div>
+</div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Image</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Total Price</th>
+            <th>Date & Time</th>
+            <th>Payment Mode</th>
+            <th>Address</th>
+            <th>Online <br> Payment Status</th>
+            <th>Delivery Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in order_items %}
+        <tr>
+            <td>
+                <a href=""><img src="{{order.product.img.url}}" alt="image" class="imgss" style="max-width: 80px;"></a>
+            </td>
+            <td>
+                <h3><a href="#" class="product-name">{{order.product.name}}</a></h3>
+            </td>
+            <td>
+                <p class="price">{{order.quantity}}</p>
+            </td>
+            <td>
+                <p class="price">Rs.{{order.product_total}}</p>
+            </td>
+            <td>
+                <p style="color:#CA9653;">{{order.order.date_time}}</p>
+            </td>
+            <td>
+                <p style="color:#BEBE20;">{{order.order.get_payment_type_display}}</p>
+            </td>
+            <td>
+                <p style="color:#BEBE20;">{{order.order.address}}</p>
+            </td>
+            <td>
+                {% if order.order.payment_status %}
+                <p class="paid">Paid</p>
+                {% else %}
+                {% if order.order.payment_type != 1 %}
+                <p class="not-paid">Payment Failed</p>
+                {% endif %}
+                {% endif %}
+            </td>
+            <td>
+                {% if order.order.delivery_status %}
+                <p class="delivered">Delivered</p>
+                {% else %}
+                <p class="not-delivered">Not Delivered</p>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+    <div class="pagination justify-content-center">
+        {% if order_items.paginator.num_pages > 1 %}
+            <ul class="pagination">
+                {% if order_items.has_previous %}
+                   <li class="page-item">
+                       <a class="page-link" href="?page=1"> First</a>
+                   </li>
+                   <li class="page-item">
+                       <a class="page-link" href="?page={{ order_items.previous_page_number }}">previous</a>
+                   </li>
+                {% endif %}
+
+                {% for num in order_items.paginator.page_range %}
+                     <li class="page-item {% if num == order_items.number %}active{% endif %}">
+                         <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                     </li>
+                {% endfor %}
+
+                {% if order_items.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ order_items.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ order_items.paginator.num_pages }}">Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+
+
+
+
+{% endblock %}

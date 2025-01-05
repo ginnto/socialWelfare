@@ -1,43 +1,76 @@
 from django.db import models
-from home.models import *    # we call the model in the shop that is products and categorys
-from django.contrib.auth.models import User   # user table
+from .models import *
+from home.models import *
+from user.models import *
 
 # Create your models here.
 
-class OrderItem(models.Model):
-    PENDING = 'Pending'
-    COMPLETED = 'Completed'
 
-    ORDER_STATUS_CHOICES = [
-        (PENDING, 'Pending'),
-        (COMPLETED, 'Completed'),
-    ]
+class Cart(models.Model):
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    cart_id = models.CharField(max_length=250, blank=True)
+    date_added = models.DateField(auto_now_add=True)
 
-    UNPAID = 'Unpaid'
-    PAID = 'Paid'
-
-    PAYMENT_STATUS_CHOICES = [
-        (UNPAID, 'Unpaid'),
-        (PAID, 'Paid'),
-    ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)  # User who created the order
-    prod = models.ForeignKey(products, on_delete=models.CASCADE)  # Product that is being ordered
-    quan = models.IntegerField()  # Quantity of the product
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the product
-    active = models.BooleanField(default=True)  # Active status of the item in the cart
-    order_date = models.DateTimeField(auto_now_add=True)  # Date when the order was placed
-    is_ordered = models.BooleanField(default=False)  # Indicates whether this item is part of an order
-    order_status = models.CharField(max_length=50,choices=ORDER_STATUS_CHOICES,default='Pending')  # Track the order status (Pending, Completed, etc.)
-    payment_status = models.CharField(max_length=50,choices=PAYMENT_STATUS_CHOICES, default='Unpaid')  # Payment status (Unpaid, Paid)
-    # shipping_address = models.TextField(null=True, blank=True)  # Shipping address for the order
-    payment_method = models.CharField(max_length=50, null=True, blank=True)  # Payment method used
-    delivery_date = models.DateTimeField(null=True, blank=True)  # Delivery date
-
-    def total(self):
-        return self.prod.price * self.quan  # Calculate the total price for this item
-
+    class Meta:
+        db_table = 'Cart'
+        ordering =['date_added']
     def __str__(self):
-        return f"{self.prod.name} - {self.quan} x {self.price}"
+        return self.cart_id
 
+
+class CartItem(models.Model):
+    product = models.ForeignKey(products, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    active = models.BooleanField(default=True)
+    class Meta:
+        db_table = 'CartItem'
+    def sub_total(self):
+        return self.product.price * self.quantity
+    def __str__(self):
+        return self.product
+
+
+class Order(models.Model):
+    COD = 1
+    Online = 2
+    choices = (
+        (1, 'Cash On Delivery'),
+        (2, 'Online Payment')
+    )
+
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    cart_id = models.ForeignKey(Cart, on_delete=models.PROTECT)
+    address = models.TextField(max_length=300, default='my_address')
+    delivery_status = models.BooleanField(default=False)
+    date_time = models.DateTimeField(auto_now=True)
+    amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    quantity = models.IntegerField(default=0)
+    payment_type = models.IntegerField(choices=choices)
+    payment_status = models.BooleanField(default=False)
+    def __str__(self):
+        return f'Order Id: {self.cart_id.cart_id} - User: {self.user.first_name} {self.user.last_name}'
+
+
+class ProductOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(products, on_delete=models.PROTECT)
+    quantity = models.IntegerField()
+    delivery_status = models.BooleanField(default=False)
+    product_total = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    def __str__(self):
+        return f'Order: {self.order} Product: {self.product} Quantity: {self.quantity}'
+
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    card_number = models.IntegerField()
+    name = models.CharField(max_length=40)
+    expiry_month = models.CharField(max_length=2)
+    expiry_year = models.CharField(max_length=2)
+    cvv = models.CharField(max_length=3)
+    def __str__(self):
+        return f'Payment for {self.user}'
 

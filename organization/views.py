@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -126,11 +126,81 @@ def organization_addproduct(request):
     categories = categ.objects.all()
     return render(request, 'orgaddproduct.html',{'categories': categories})
 
+
 def orderslist(request):
-    return render(request, 'orgorder.html')
+    organization = get_object_or_404(Organization, id=org_id)
+
+    # Filter the orders by the organization ID through the related products
+    product_orders = ProductOrder.objects.filter(order__cart__user__org_id=organization)
+
+    # Handle updating delivery status
+    if request.method == "POST":
+        product_order_id = request.POST.get("product_order_id")
+        product_order = get_object_or_404(ProductOrder, id=product_order_id)
+        product_order.delivery_status = not product_order.delivery_status  # Toggle the status
+        product_order.save()
+
+    return render(request, 'orgorder.html', {
+        "organization": organization,
+        "product_orders": product_orders,
+    })
+
+
 
 def donation(request):
+
     return render(request, 'orgdonation.html')
 
 def donationreq(request):
-    return render(request, 'orgdonationreq.html')
+    user = request.user
+    try:
+        organization = Organization.objects.get(user=user)
+    except Organization.DoesNotExist:
+        organization = None  # Handle if the user is not associated with an organization
+
+    if request.method == 'POST':
+        # Retrieve data from the form
+        needed_amount = request.POST.get('needed_amount')
+        purpose = request.POST.get('purpose')
+        account_number = request.POST.get('account_number')
+        ifsc_code = request.POST.get('ifsc_code')
+        time_limit = request.POST.get('time_limit')
+
+
+        donation_request = DonationRequest.objects.create(
+            organization=organization,
+            needed_amount=needed_amount,
+            purpose=purpose,
+            account_number=account_number,
+            ifsc_code=ifsc_code,
+            time_limit=time_limit,
+        )
+
+        return redirect('donation')  # Redirect to a success page after submission
+
+    return render(request, 'orgdonationreq.html', {
+        'organization': organization,
+    })
+
+@login_required
+def donation_list_successful(request):
+    user = request.user
+
+    # Assuming each user can belong to one organization
+    try:
+        organization = user.organization  # or if you have many-to-many, you would filter here
+    except Organization.DoesNotExist:
+        # Handle the case where a user does not have an organization
+        organization = None
+
+    if organization:
+        # Filter donations by organization and payment status (Completed)
+        donations = donPayment.objects.filter(
+            donation_request__organization=organization,
+            payment_status='Completed'
+        )
+    else:
+        # If no organization is found for the user, you can either show an error or leave donations empty
+        donations = []
+
+    return render(request, 'donation_list_successful.html', {'donations': donations})

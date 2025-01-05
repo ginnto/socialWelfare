@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .forms import CustomerProfileForm
 from .models import *
+from organization.models import *
 
 def customer_register(request):
     if request.method == "POST":
@@ -94,6 +95,41 @@ def edit_profile(request):
     else:
         form = CustomerProfileForm(instance=customer)
     return render(request, 'edit_profile.html', {'form': form})
+
+
+def donation_list_view(request):
+    donation_requests = DonationRequest.objects.all()
+
+    return render(request, 'donation_list.html', {
+        'donation_requests': donation_requests
+    })
+
+@login_required
+def pay_donation(request, id):
+    # Fetch the donation request
+    donation_request = DonationRequest.objects.get(id=id)
+
+    if request.method == "POST":
+
+        amount = donation_request.needed_amount  # Payment amount is the needed amount for the donation request
+        payment_method = request.POST['payment_method']
+        payment = donPayment.objects.create(
+            donation_request=donation_request,
+            user=request.user,
+            amount=amount,
+            payment_method=payment_method,
+            payment_status=donPayment.COMPLETED,  # Assuming payment was successful
+            transaction_id="dummy_transaction_id_123"  # This would be from your payment gateway
+        )
+        payment.save()
+
+        # Redirect to a success page or a thank you page
+        return redirect('customer_profile')
+
+    return render(request, 'pay_donation.html', {
+        'donation_request': donation_request
+    })
+
 
 def logout(request):
     auth.logout(request)

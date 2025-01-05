@@ -1,0 +1,49 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Donation List Start -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="mb-4">Donation Requests</h2>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    {% if donation_requests %}
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Goal Name</th>
+                                    <th>Requested Amount</th>
+                                    <th>Purpose</th>
+                                    <th>Account Number</th>
+                                    <th>IFSC Code</th>
+                                    <th>Time Limit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in donation_requests %}
+                                    <tr>
+                                        <td>{{ request.goal_name }}</td>
+                                        <td>${{ request.needed_amount }}</td>
+                                        <td>{{ request.purpose }}</td>
+                                        <td>{{ request.account_number }}</td>
+                                        <td>{{ request.ifsc_code }}</td>
+                                        <td>{{ request.time_limit }}</td>
+                                        <td><a href="{% url 'pay_donation' request.id %}"> pay now </a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p>No donation requests available at the moment.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Donation List End -->
+
+{% endblock %}

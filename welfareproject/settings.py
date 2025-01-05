@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'home',
     'organization',
     'user',
-    'cart'
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -66,8 +66,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processor.cate',  # app name.file name of contextprocesssor.name of function in contextpro
-                'cart.context_processor.cart_total',
 
             ],
         },

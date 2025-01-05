@@ -1,0 +1,125 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+{% block content %}
+
+
+
+    <div class="bg-light py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">
+            <a href="#">Home</a> <span class="mx-2 mb-0">/</span>
+            <strong class="text-black">Checkout</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-5 mb-md-0">
+            <h2 class="h3 mb-3 text-black">Billing Details</h2>
+
+            <form method="post" action="{% url 'Cart:place_order' %}">
+              {% csrf_token %}
+            <div class="p-3 p-lg-5 border">
+
+              <div class="form-group row">
+
+                <div class="col-md-6">
+                  <label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_fname" name="c_fname" value="{{user_details.cust_name}}" readonly>
+                </div>
+                <div class="col-md-6">
+                  <label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_lname" name="c_lname" value="{{user_details.last_name}}" readonly>
+                </div>
+
+              </div>
+
+    
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="c_address" class="text-black">Address <span class="text-danger">*</span></label>
+                  <textarea class="form-control" id="c_address" name="c_address" required></textarea>
+                </div>
+              </div>
+
+    
+              <div class="form-group row mb-5">
+                <div class="col-md-6">
+                  <label for="c_email_address" class="text-black">Email Address <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_email_address" name="c_email_address" value="{{user_details.user.email}}" readonly>
+                </div>
+                <div class="col-md-6">
+                  <label for="c_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_phone" name="c_phone" placeholder="Phone Number" value="{{user_details.cust_phno}}" readonly>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="payment_option" class="text-black">Select Payment Option <span class="text-danger">*</span></label>
+                <select class="form-control" id="payment_option" name="payment_option">
+                  <option disabled selected>--select--</option>
+                  <option value="1">Cash on Delivery</option>
+                  <option value="2">Online Payment</option>
+                </select>
+              </div>
+
+              <br><br>
+              <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-lg btn-block" onclick="handlePayment()">Place
+                      Order</button>
+              </div>
+
+
+            </div>
+            </form>
+          </div>
+          <div class="col-md-6">
+
+    
+            <div class="row mb-5">
+              <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black">Your Order</h2>
+                <div class="p-3 p-lg-5 border">
+                  <table class="table site-block-order-table mb-5">
+                    <thead>
+                      <th>Product</th>
+                      <th>Total</th>
+                    </thead>
+                    <tbody>
+                    {% for i in cart_items %}
+                      <tr>
+                        <td>{{i.product.product}} <strong class="mx-2">x</strong> 1</td>
+                        <td>{{i.sub_total}}</td>
+                      </tr>
+                    {% endfor %}
+
+                      <tr>
+                        <td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
+                        <td class="text-black">Rs.{{total}}</td>
+                      </tr>
+                      <tr>
+                        <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                        <td class="text-black font-weight-bold"><strong>Rs.{{total}}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+    
+
+    
+
+    
+                </div>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+        <!-- </form> -->
+      </div>
+    </div>
+    
+{% endblock %}

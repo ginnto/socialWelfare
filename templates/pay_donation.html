@@ -1,0 +1,58 @@
+{% extends 'customerbase.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Payment Form Start -->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <h2 class="mb-4">Donate for "{{ donation_request.goal_name }}"</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+
+                        <!-- Payment Method Selection -->
+                        <div class="form-group">
+                            <label for="payment_method">Payment Method</label>
+                            <select name="payment_method" class="form-control" required>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="PayPal">PayPal</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+
+                        <!-- Amount Display -->
+                        <div class="form-group">
+                            <p>Amount: ${{ donation_request.needed_amount }}</p>
+                        </div>
+
+                        <!-- Credit Card Fields -->
+                        <div id="credit-card-fields" class="payment-method-fields">
+                            <div class="form-group">
+                                <label for="card_number">Credit Card Number</label>
+                                <input type="text" name="card_number" class="form-control" required placeholder="Enter your credit card number">
+                            </div>
+                            <div class="form-group">
+                                <label for="expiry_year">Expiry Year</label>
+                                <input type="text" name="expiry_year" class="form-control" required placeholder="Enter expiry year (YYYY)">
+                            </div>
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" name="cvv" class="form-control" required placeholder="Enter CVV">
+                            </div>
+                        </div>
+
+                        <!-- PayPal or Bank Transfer Fields (if needed, can be added here) -->
+
+                        <button type="submit" class="btn btn-success">Pay Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Payment Form End -->
+
+{% endblock %}

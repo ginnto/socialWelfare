@@ -1,13 +1,16 @@
 from django.urls import path
 from . import views
 
+
+app_name = 'Cart'   # for specifiy urls
+
 urlpatterns = [
-    path('cartDetails', views.cart_details, name='cartDetails'),
-    path('add/<int:product_id>/', views.add_cart, name='addcart'),
-    path('cart_decrement/<int:product_id>/', views.min_cart, name='cart_decrement'),
-    path('remove/<int:product_id>/', views.cart_delete, name='remove'),
-    # path('checkout',views.checkout, name='checkout'),
-    # path('orders',views.orders, name='orders'),
-    # path('payment',views.payments, name='payment'),
-    # path('success',views.success, name='success'),
-    ]
+    path('', views.cart_details, name='cart_details'),
+    path('add_cart/<int:product_id>/', views.add_cart, name='add_cart'),
+    path('remove/<int:product_id>/', views.cart_remove, name='cart_remove'),
+    path('full_remove/<int:product_id>/', views.full_remove, name='full_remove'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('place-order', views.PlaceOrder, name='place_order'),
+    path('payment/<int:order_id>', views.Payments, name='payment'),
+    path('orderview/', views.Order_Confirmation, name='orderview'),
+]
