@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from home.models import *
+from cart.models import *
 
 
 def organization_register(request):
@@ -128,12 +129,10 @@ def organization_addproduct(request):
 
 
 def orderslist(request):
-    organization = get_object_or_404(Organization, id=org_id)
-
-    # Filter the orders by the organization ID through the related products
-    product_orders = ProductOrder.objects.filter(order__cart__user__org_id=organization)
-
-    # Handle updating delivery status
+    user = request.user.id
+    organization = get_object_or_404(Organization, user_id=user)
+    product_orders = ProductOrder.objects.filter(product__org_id=organization)
+    # print(product_orders.order_id.user_id.cust_name)
     if request.method == "POST":
         product_order_id = request.POST.get("product_order_id")
         product_order = get_object_or_404(ProductOrder, id=product_order_id)
@@ -146,9 +145,7 @@ def orderslist(request):
     })
 
 
-
 def donation(request):
-
     return render(request, 'orgdonation.html')
 
 def donationreq(request):
@@ -176,7 +173,7 @@ def donationreq(request):
             time_limit=time_limit,
         )
 
-        return redirect('donation')  # Redirect to a success page after submission
+        return redirect('donation_list_successful')  # Redirect to a success page after submission
 
     return render(request, 'orgdonationreq.html', {
         'organization': organization,
@@ -188,7 +185,7 @@ def donation_list_successful(request):
 
     # Assuming each user can belong to one organization
     try:
-        organization = user.organization  # or if you have many-to-many, you would filter here
+        organization = Organization.objects.get(user=user)
     except Organization.DoesNotExist:
         # Handle the case where a user does not have an organization
         organization = None
@@ -203,4 +200,4 @@ def donation_list_successful(request):
         # If no organization is found for the user, you can either show an error or leave donations empty
         donations = []
 
-    return render(request, 'donation_list_successful.html', {'donations': donations})
+    return render(request, 'orgdonation.html', {'donations': donations})

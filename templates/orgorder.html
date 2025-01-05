@@ -39,67 +39,40 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Static Data for Testing -->
+
+                            {% for product_order in product_orders %}
                                 <tr>
-                                    <td>1</td>
-                                    <td>john_doe</td>
-                                    <td>Product A</td>
-                                    <td>2</td>
-                                    <td>Credit Card</td>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ product_order.order.user.cust_name }}</td>
+                                    <td>{{ product_order.product.name }}</td>
+                                    <td>{{ product_order.quantity }}</td>
+                                    <td>
+                                       {% if product_order.order.payment_type == 1 %}
+                                            Cash On Delivery
+                                        {% elif product_order.order.payment_type == 2 %}
+                                            Online Payment
+                                        {% else %}
+                                            Unknown Payment Type
+                                        {% endif %}
+                                    </td>
                                     <td><span class="badge badge-success">Paid</span></td>
-                                    <td>$100.00</td>
+                                    <td>{{ product_order.product_total }}</td>
+
                                     <td>2025-01-02</td>
-                                    <td>
-                                        <a href="#" class="btn btn-info btn-sm">View</a>
-                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
+
+                                    <td>{{ product_order.delivery_status|yesno:"Delivered,Pending" }}</td>
+                                      <td>
+                                        <form method="post">
+                                          {% csrf_token %}
+                                          <input type="hidden" name="product_order_id" value="{{ product_order.id }}">
+                                          <button type="submit">{{ product_order.delivery_status|yesno:"Mark as Pending,Mark as Delivered" }}</button>
+                                        </form>
+                                      </td>
+
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>mary_smith</td>
-                                    <td>Product B</td>
-                                    <td>1</td>
-                                    <td>PayPal</td>
-                                    <td><span class="badge badge-danger">Unpaid</span></td>
-                                    <td>$50.00</td>
-                                    <td>2025-01-03</td>
-                                    <td>
-                                        <a href="#" class="btn btn-info btn-sm">View</a>
-                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>jane_doe</td>
-                                    <td>Product C</td>
-                                    <td>3</td>
-                                    <td>Bank Transfer</td>
-                                    <td><span class="badge badge-success">Paid</span></td>
-                                    <td>$180.00</td>
-                                    <td>2025-01-01</td>
-                                    <td>
-                                        <a href="#" class="btn btn-info btn-sm">View</a>
-                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>peter_parker</td>
-                                    <td>Product D</td>
-                                    <td>1</td>
-                                    <td>Cash on Delivery</td>
-                                    <td><span class="badge badge-danger">Unpaid</span></td>
-                                    <td>$30.00</td>
-                                    <td>2025-01-04</td>
-                                    <td>
-                                        <a href="#" class="btn btn-info btn-sm">View</a>
-                                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
-                                </tr>
+
+{% endfor %}
+
                             </tbody>
                         </table>
                     </div>

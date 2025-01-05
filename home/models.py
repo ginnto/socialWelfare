@@ -4,6 +4,7 @@ from django.urls import reverse
 from organization.models import *
 
 # Create your models here.
+
 class categ(models.Model):
     name=models.CharField(max_length=200,unique=True)
     slug=models.SlugField(max_length=200,unique=True)

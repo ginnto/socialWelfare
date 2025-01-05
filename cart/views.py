@@ -22,12 +22,14 @@ def _cart_id(request):
 
 @login_required(login_url='Customer:login')
 def add_cart(request, product_id):
-    user = Customer.objects.get(user_id=request.user.id)
+    user = request.user.id
+    userid = Customer.objects.get(user_id=user)
+    print(userid.id)
     product = products.objects.get(id=product_id)
     try:
-        cart = Cart.objects.get(user=request.user.id)
+        cart = Cart.objects.get(user=userid)
     except Cart.DoesNotExist:
-        cart = Cart.objects.create(cart_id=_cart_id(request), user=user)
+        cart = Cart.objects.create(cart_id=_cart_id(request), user=userid)
         cart.save()
 
     try:
@@ -68,7 +70,10 @@ def cart_details(request, total=0, counter=0, cart_items=None):
     return render(request, 'cart/cart.html', dict(cart_items=cart_items, total=total, counter=counter))
 @login_required(login_url='Customer:login')
 def full_remove(request, product_id):
-    cart = Cart.objects.get(user=request.user.id)
+    user = request.user.id
+    userid = Customer.objects.get(user_id=user)
+
+    cart = Cart.objects.get(user=userid.id)
     product = get_object_or_404(products, id=product_id)
     cart_item = CartItem.objects.get(product=product, cart=cart)
     cart_item.delete()
@@ -77,7 +82,10 @@ def full_remove(request, product_id):
 
 @login_required(login_url='Customer:login')
 def cart_remove(request, product_id):
-    cart = Cart.objects.get(user=request.user.id)
+    user = request.user.id
+    userid = Customer.objects.get(user_id=user)
+
+    cart = Cart.objects.get(user=userid.id)
     product = get_object_or_404(products, id=product_id)
     cart_item = CartItem.objects.get(product=product, cart=cart)
     if cart_item.quantity > 1:

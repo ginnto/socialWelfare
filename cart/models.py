@@ -17,7 +17,6 @@ class Cart(models.Model):
     def __str__(self):
         return self.cart_id
 
-
 class CartItem(models.Model):
     product = models.ForeignKey(products, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
@@ -48,9 +47,9 @@ class Order(models.Model):
     quantity = models.IntegerField(default=0)
     payment_type = models.IntegerField(choices=choices)
     payment_status = models.BooleanField(default=False)
+
     def __str__(self):
         return f'Order Id: {self.cart_id.cart_id} - User: {self.user.first_name} {self.user.last_name}'
-
 
 class ProductOrder(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -60,8 +59,6 @@ class ProductOrder(models.Model):
     product_total = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     def __str__(self):
         return f'Order: {self.order} Product: {self.product} Quantity: {self.quantity}'
-
-
 
 class Payment(models.Model):
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
