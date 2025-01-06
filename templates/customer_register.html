@@ -98,7 +98,7 @@ button:hover {
 
             <div class="form-group">
                 <label for="cust_pincode">Pincode</label>
-                <input type="number" id="cust_pincode" name="cust_pincode" required>
+                <input type="number" id="cust_pincode" name="cust_pincode" required minlength="6" maxlength="6" pattern="\d{6}">
             </div>
 
             <div class="form-group">
@@ -108,7 +108,7 @@ button:hover {
 
             <div class="form-group">
                 <label for="cust_phno">Phone Number</label>
-                <input type="text" id="cust_phno" name="cust_phno" required>
+                <input type="text" id="cust_phno" name="cust_phno" required minlength="10" maxlength="10" pattern="\d{10}">
             </div>
 
             <div class="form-group">
