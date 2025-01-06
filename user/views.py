@@ -71,7 +71,7 @@ def customer_login(request):
                 messages.success(request, "Login successful!")
                 return redirect('ecompage')
             except Customer.DoesNotExist:
-                messages.error(request, "Customer profile not found.")
+                messages.error(request, "Customer profile not found.This login only for Customers  ")
                 return redirect('customer_login')
         else:
             messages.error(request, "Invalid email or password.")
