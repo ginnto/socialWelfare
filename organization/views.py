@@ -2,10 +2,12 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from home.models import *
 from cart.models import *
+from user.models import *
 
 
 def organization_register(request):
@@ -97,6 +99,37 @@ def organization_dashboard(request):
     organization = Organization.objects.get(user=request.user)  # Modify as per your model structure
     return render(request, 'orgdashboard.html', {'organization': organization})
 
+
+@login_required
+def organizationproduct(request):
+    try:
+        # Fetch the organization linked to the logged-in user
+        org = Organization.objects.get(user=request.user)
+    except Organization.DoesNotExist:
+        org = None  # Handle case where no organization is linked to the user
+
+    # Fetch products linked to the organization
+    org_products = products.objects.filter(org_id=org) if org else []
+
+    context = {
+        'org_products': org_products,
+        'organization': org,  # Pass the organization for use in the template if needed
+    }
+    return render(request, 'org_product.html', context)
+
+
+def product_feedback(request, product_id):
+    feedback_list = ProductFeedback.objects.filter(product_id=product_id)
+    feedback_data = [
+        {
+            'user': feedback.user.username,
+            'feedback': feedback.feedback,
+            'rating': feedback.rating,
+            'created_at': feedback.created_at.strftime('%d %b %Y, %H:%M'),
+        }
+        for feedback in feedback_list
+    ]
+    return JsonResponse({'feedback': feedback_data})
 
 def organization_addproduct(request):
     if request.method == "POST":
@@ -201,3 +234,63 @@ def donation_list_successful(request):
         donations = []
 
     return render(request, 'orgdonation.html', {'donations': donations})
+
+
+@login_required
+def request_material_view(request):
+    if request.method == 'POST':
+        materials = request.POST['materials']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        time_limit = request.POST['time_limit']
+
+        user = request.user
+        org = Organization.objects.get(user=user)
+
+        productsreq.objects.create(
+            org=org,
+            materials=materials,
+            phone=phone,
+            email=email,
+            time_limit=time_limit
+        )
+        return redirect('materiallist')  # Redirect to a success page or back to dashboard
+
+    user = request.user
+    org = Organization.objects.get(user=user)
+
+    context = {
+        'material_choices': productsreq._meta.get_field('materials').choices,
+        'org_name': org.orgname,
+        'org_phone': org.org_phno,
+        'org_email': org.user.email,
+    }
+    return render(request, 'orgmaterialreq.html', context)
+
+
+def materiallist(request):
+    user = request.user
+    org = Organization.objects.get(user=user)
+
+    # Get all donation requests for the organization
+    donations = productsreq.objects.filter(org=org)
+
+    # Check if any donations have been received
+    donation_notifications = []
+    for donation in donations:
+        proreq_entries = proreq.objects.filter(req=donation, status="True")
+        if proreq_entries.exists():
+            donation_notifications.append(donation)
+
+    # Add a message if there are new donations
+    if donation_notifications:
+        messages.success(
+            request,
+            f"You have received {len(donation_notifications)} donation(s)!"
+        )
+
+    context = {
+        'donations': donations,
+    }
+    return render(request, 'material_donation_list.html', context)
+

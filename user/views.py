@@ -1,6 +1,6 @@
 from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from .forms import CustomerProfileForm
 from .models import *
@@ -129,6 +129,63 @@ def pay_donation(request, id):
     return render(request, 'pay_donation.html', {
         'donation_request': donation_request
     })
+
+def proreq_list_view(request):
+    product_request = productsreq.objects.all()
+
+    return render(request, 'cusproreq_list.html', {
+        'product_requests': product_request
+    })
+
+
+@login_required
+def add_proreq(request, request_id):
+    # Get the productsreq object
+    product_request = get_object_or_404(productsreq, id=request_id)
+
+    # Check if the user has already donated
+    existing_proreq = proreq.objects.filter(req=product_request, user=request.user).first()
+    if existing_proreq:
+        messages.warning(request, "You have already committed to donate for this request.")
+        return redirect('product_requests')  # Redirect to the product requests list
+
+    # Create a new proreq object
+    proreq.objects.create(req=product_request, user=request.user, status="True")
+    messages.success(request, "Thank you for your donation commitment!")
+    return redirect('product_requests')
+
+@login_required
+def feedback_form(request, product_id):
+    product = get_object_or_404(products, id=product_id)
+
+    if request.method == "POST":
+        feedback_text = request.POST.get('feedback')
+        rating = request.POST.get('rating')
+
+        # Save the feedback
+        ProductFeedback.objects.create(
+            user=request.user,
+            product=product,
+            feedback=feedback_text,
+            rating=rating
+        )
+        messages.success(request, "Feedback submitted successfully!")
+        return redirect('Cart:orderview')  # Redirect to order confirmation page or desired page
+
+    context = {
+        'product': product,
+    }
+    return render(request, 'feedback_form.html', context)
+
+
+@login_required
+def user_feedback_list(request):
+    feedbacks = ProductFeedback.objects.filter(user=request.user).order_by('-created_at')  # Fetch feedbacks for the logged-in user
+    context = {
+        'feedbacks': feedbacks,
+    }
+    return render(request, 'user_feedback_list.html', context)
+
 
 
 def logout(request):

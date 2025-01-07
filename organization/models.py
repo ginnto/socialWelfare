@@ -62,3 +62,30 @@ class donPayment(models.Model):
 
     def __str__(self):
         return f"Payment for {self.donation_request.goal_name} by {self.user.username} - {self.payment_status}"
+
+
+class productsreq(models.Model):
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE)  # Link to the organization
+    phone = models.TextField()  # Purpose of the donation
+    email = models.CharField(max_length=20)  # Bank account number for donations
+    materials = models.CharField(
+        max_length=20,
+        choices=[
+            ('clothes', 'Clothes'),
+            ('school_materials', 'School Materials'),
+        ]
+    )
+    time_limit = models.DateField()  # Deadline for the donation goal
+
+    def __str__(self):
+        return f"product Request: {self.materials} by {self.organization.name}"
+
+
+
+class proreq(models.Model):
+    req= models.ForeignKey(productsreq, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50, default=False)
+
+    def __str__(self):
+        return self.user.email

@@ -65,6 +65,7 @@
             <td>
                 {% if order.delivery_status %}
                     <p class="delivered">Delivered</p>
+                        <a href="{% url 'feedback_form' order.product.id %}" class="btn btn-primary btn-sm mt-2">Feedback</a>
                 {% else %}
                     <p class="not-delivered">Not Delivered</p>
                 {% endif %}
