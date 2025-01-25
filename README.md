@@ -115,8 +115,7 @@ We ❤️ contributions! Here’s how you can help:
 
 ---
 
-## 📸 **Screenshots** *(Add your screenshots here for better visualization)*  
-
+## 📸 **Screenshots** 
 ---
 
 ## 📜 **License**  
