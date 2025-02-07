@@ -191,7 +191,6 @@ def Order_Confirmation(request):
     userid = Customer.objects.get(user_id=user)
     cod_order = Order.objects.filter(user=userid.id)
     order_products = ProductOrder.objects.filter(order__in=cod_order).order_by('-order__date_time')
-
     return render(request, 'cart/order_confirmation.html', {'order_items':order_products})
 
 
